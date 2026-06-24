@@ -331,7 +331,7 @@ const days = [
     stops:[
       {type:'place', time:'—', text:"Petit-déjeuner."},
       {type:'transport', time:'09h00', text:"Route vers Bath.", note:"Parking Park & Ride puis bus pour le centre-ville.", map:'Lansdown Park and Ride, Bath, UK', mode:'driving'},
-      {type:'place', time:'11h00', text:"Les Bains Romains.", desc:"Les thermes les mieux conservés du monde romain — construits il y a 2000 ans ! L'eau verte et fumante sort naturellement du sol à 46°C. Tu marcheras sur les mêmes mosaïques que les soldats romains.", map:'The Roman Baths, Bath, UK'},
+      {type:'place', time:'11h00', text:"Les Bains Romains.", desc:"Les thermes les mieux conservés du monde romain — construits il y a 2000 ans ! L'eau verte et fumante sort naturellement du sol à 46°C. Tu marcheras sur les mêmes mosaïques que les soldats romains.", note:"📅 À réserver en avance.", noteClass:'warn', map:'The Roman Baths, Bath, UK'},
       {type:'place', time:'14h00', text:"Jane Austen Centre.", desc:"Musée dédié à Jane Austen, l'auteure d'Orgueil et Préjugés, qui vécut à Bath. Costumes d'époque et immersion dans l'Angleterre du XIXe siècle.", map:'Jane Austen Centre, Bath, UK'},
       {type:'hotel', time:'17h00', text:"Retour au Tollgate Inn (Holt).", map:'The Tollgate Inn, Holt, Wiltshire, UK', mode:'driving'}
     ]
@@ -342,6 +342,7 @@ const days = [
       {type:'place', time:'—', text:"Petit-déjeuner."},
       {type:'hotel', time:'—', text:"Check-out Tollgate Inn (Holt).", note:"⏰ Check-out entre 7h45 et 10h30 — horaires stricts ! · 💳 Régler £316.00 sur place (rien n'a été encaissé). Visa/Mastercard acceptés. · 💼 Demander une facture pour remboursement CE.", noteClass:'warn'},
       {type:'place', time:'09h30', text:"Départ et route vers les gorges de Cheddar.", desc:"Les plus grandes gorges d'Angleterre creusées par un glacier il y a 12 000 ans — des falaises calcaires de 137 m de haut ! On y a aussi découvert le squelette humain le plus vieux de Grande-Bretagne (9 000 ans !).", note:"Temps de route depuis Holt : environ 1h.", map:'Cheddar Gorge, Somerset, UK', mode:'driving'},
+      {type:'place', time:'10h30', text:"Cheddar Gorge and Cave.", desc:"Les grottes de Cheddar sont les plus grandes cavernes naturelles de Grande-Bretagne — stalactites, stalagmites géantes et rivière souterraine. C'est ici qu'on a trouvé l'homme de Cheddar vieux de 9 000 ans !", note:"📅 À réserver en avance.", noteClass:'warn', mapUrl:'https://maps.app.goo.gl/4T8QpdXB2YhgmwGp6'},
       {type:'transport', time:'14h30', text:"Trajet vers le Spread Eagle Inn.", note:"Environ 45 min."},
       {type:'hotel', time:'14h30', text:"Arrivée au Spread Eagle Inn (Stourhead).", note:"Check-in à partir de 15h00 (arrivée anticipée sur demande) · Check-out avant 10h00.", map:'The Spread Eagle Inn, Stourton, UK', mode:'driving'},
       {type:'place', time:'15h45', text:"Visite des jardins de Stourhead.", desc:"L'un des plus beaux jardins paysagers du monde, inspiré des peintures classiques italiennes. Un lac artificiel entouré de temples grecs, un grotto mystérieux et des arbres centenaires — comme dans un conte.", map:'Stourhead, Stourton, UK'}
@@ -396,11 +397,47 @@ const days = [
   }
 ];
 
-function goTo(query, mode){
-  let url = 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(query);
-  if(mode) url += '&travelmode=' + mode;
-  window.open(url, '_blank');
+function goTo(input, mode){
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  const isStandalone = window.navigator.standalone === true;
+  const isDirectUrl = input.startsWith('http');
+
+  let webUrl = isDirectUrl ? input : 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(input);
+  if(!isDirectUrl && mode) webUrl += '&travelmode=' + mode;
+
+  if(isIOS && isStandalone){
+    let dirflg = 'd';
+    if(mode === 'transit') dirflg = 'r';
+    else if(mode === 'walking') dirflg = 'w';
+
+    sessionStorage.setItem('scrollY', window.scrollY);
+
+    if(!isDirectUrl){
+      const gmUrl = 'comgooglemaps://?daddr=' + encodeURIComponent(input) + '&directionsmode=' + (mode || 'driving');
+      const appleUrl = 'maps://?daddr=' + encodeURIComponent(input) + '&dirflg=' + dirflg;
+      const iframe = document.createElement('iframe');
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+      iframe.src = gmUrl;
+      setTimeout(() => { document.body.removeChild(iframe); }, 100);
+      setTimeout(() => { window.location.href = appleUrl; }, 500);
+    } else {
+      const a = document.createElement('a');
+      a.href = webUrl; a.target = '_blank'; a.rel = 'noopener noreferrer';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    }
+  } else {
+    const a = document.createElement('a');
+    a.href = webUrl; a.target = '_blank'; a.rel = 'noopener noreferrer';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  }
 }
+
+// Restaure la position au retour sur la page
+window.addEventListener('pageshow', () => {
+  const y = sessionStorage.getItem('scrollY');
+  if(y) { window.scrollTo(0, parseInt(y)); sessionStorage.removeItem('scrollY'); }
+});
 
 const daysEl = document.getElementById('days');
 const pillnav = document.getElementById('pillnav');
@@ -423,9 +460,10 @@ days.forEach(day => {
   dayEl.id = 'j' + day.num;
 
   const stopsHtml = day.stops.map(s => {
+    const mapTarget = s.mapUrl || s.map;
     const descHtml = s.desc ? `<div class="stop-desc">✨ ${s.desc}</div>` : '';
     const noteHtml = s.note ? `<div class="stop-note ${s.noteClass||''}">${s.note}</div>` : '';
-    const btnHtml = s.map ? `<button class="navbtn" onclick="goTo('${s.map.replace(/'/g,"\\'")}','${s.mode||''}')">🧭 Itinéraire</button>` : '';
+    const btnHtml = mapTarget ? `<button class="navbtn" onclick="goTo('${mapTarget.replace(/'/g,"\\'")}','${s.mode||''}')">🧭 Itinéraire</button>` : '';
     return `
       <div class="stop ${s.type}">
         <span class="marker ${s.type}"></span>
