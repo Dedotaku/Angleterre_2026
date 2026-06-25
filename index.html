@@ -97,8 +97,10 @@
   .info-grid{ display:grid; grid-template-columns:1fr; gap:10px;}
   @media(min-width:560px){ .info-grid{grid-template-columns:1fr 1fr;} }
   .info-item{ font-size:13.5px; line-height:1.5;}
-  .info-item b{ display:block; font-family:var(--font-mono); font-size:10.5px;
-    text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft); margin-bottom:2px;}
+  .info-item b{ display:block; font-family:var(--font-display); font-size:13px;
+    font-weight:700; text-transform:uppercase; letter-spacing:.06em; 
+    color:var(--blue); margin-bottom:4px; padding-bottom:4px;
+    border-bottom:2px solid var(--blue); }
 
   .legend{ display:flex; flex-wrap:wrap; gap:14px; margin-top:14px; padding-top:14px; border-top:1px dashed var(--line);}
   .legend-item{ display:flex; align-items:center; gap:6px; font-size:12px; color:var(--ink-soft);}
@@ -342,7 +344,7 @@ const days = [
       {type:'place', time:'—', text:"Petit-déjeuner."},
       {type:'hotel', time:'—', text:"Check-out Tollgate Inn (Holt).", note:"⏰ Check-out entre 7h45 et 10h30 — horaires stricts ! · 💳 Régler £316.00 sur place (rien n'a été encaissé). Visa/Mastercard acceptés. · 💼 Demander une facture pour remboursement CE.", noteClass:'warn'},
       {type:'place', time:'09h30', text:"Départ et route vers les gorges de Cheddar.", desc:"Les plus grandes gorges d'Angleterre creusées par un glacier il y a 12 000 ans — des falaises calcaires de 137 m de haut ! On y a aussi découvert le squelette humain le plus vieux de Grande-Bretagne (9 000 ans !).", note:"Temps de route depuis Holt : environ 1h.", map:'Cheddar Gorge, Somerset, UK', mode:'driving'},
-      {type:'place', time:'10h30', text:"Cheddar Gorge and Cave.", desc:"Les grottes de Cheddar sont les plus grandes cavernes naturelles de Grande-Bretagne — stalactites, stalagmites géantes et rivière souterraine. C'est ici qu'on a trouvé l'homme de Cheddar vieux de 9 000 ans !", note:"📅 À réserver en avance.", noteClass:'warn', mapUrl:'https://maps.app.goo.gl/4T8QpdXB2YhgmwGp6'},
+      {type:'place', time:'10h30', text:"Cheddar Gorge and Cave.", desc:"Les grottes de Cheddar sont les plus grandes cavernes naturelles de Grande-Bretagne — stalactites, stalagmites géantes et rivière souterraine. C'est ici qu'on a trouvé l'homme de Cheddar vieux de 9 000 ans !", note:"💷 ~£71 pour la famille · 📅 À réserver en avance.", noteClass:'warn', mapUrl:'https://maps.app.goo.gl/4T8QpdXB2YhgmwGp6'},
       {type:'transport', time:'14h30', text:"Trajet vers le Spread Eagle Inn.", note:"Environ 45 min."},
       {type:'hotel', time:'14h30', text:"Arrivée au Spread Eagle Inn (Stourhead).", note:"Check-in à partir de 15h00 (arrivée anticipée sur demande) · Check-out avant 10h00.", map:'The Spread Eagle Inn, Stourton, UK', mode:'driving'},
       {type:'place', time:'15h45', text:"Visite des jardins de Stourhead.", desc:"L'un des plus beaux jardins paysagers du monde, inspiré des peintures classiques italiennes. Un lac artificiel entouré de temples grecs, un grotto mystérieux et des arbres centenaires — comme dans un conte.", map:'Stourhead, Stourton, UK'}
@@ -379,7 +381,8 @@ const days = [
       {type:'place', time:'—', text:"Petit-déjeuner."},
       {type:'place', time:'—', text:"Seven Sisters, en voiture.", desc:"Sept falaises de craie blanche immaculées qui plongent dans la Manche — un panorama à couper le souffle. C'est l'une des images les plus emblématiques de toute l'Angleterre !", note:"Temps de route depuis Hove : environ 35 min.", map:'Seven Sisters Country Park, UK', mode:'driving'},
       {type:'transport', time:'—', text:"Retour à l'hôtel en voiture, puis bus pour Brighton.", note:"Temps de route retour vers Hove : environ 35 min.", map:'Brighton, UK'},
-      {type:'place', time:'—', text:"Si beau temps : location de vélo et balade jusqu'à Telscombe Cliffs Scenic Point.", map:'Telscombe Cliffs, UK'},
+      {type:'place', time:'—', text:"Si beau temps : location de vélo à Brighton Beach Bikes + balade côtière jusqu'à Telscombe Cliffs.", desc:"Longer la côte à vélo depuis Brighton jusqu'aux falaises de Telscombe — vue imprenable sur la Manche. Un des plus beaux spots du Sussex !", note:"💷 ~£49 pour la famille · 📅 À réserver en avance.", noteClass:'warn', mapUrl:'https://maps.app.goo.gl/WX3KCM5fTcDouLoB9'},
+      {type:'place', time:'—', text:"🌧️ Plan B si mauvais temps : Royal Pavilion.", desc:"Palais extravagant du roi George IV mêlant architecture indienne et intérieurs chinois — comme être dans un conte des Mille et Une Nuits ! Audioguide disponible en français sur votre téléphone (gratuit). Compter 2h à 3h.", note:"💷 ~£55 pour la famille · 📅 Tickets moins chers en ligne. Ouvert dès 9h30.", map:'Royal Pavilion, Brighton, UK'},
       {type:'place', time:'—', text:"The Lanes, Brighton.", desc:"Un labyrinthe de ruelles médiévales parfois larges d'à peine un mètre, avec des boutiques de bijoux vintage, de curiosités et de street food. Facile de se perdre — c'est tout l'intérêt !", map:'The Lanes, Brighton, UK'}
     ]
   },
