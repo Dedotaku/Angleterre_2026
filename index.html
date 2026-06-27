@@ -194,6 +194,92 @@
   .day-weather .dw-rain{ color:var(--ink-soft); }
   .day-weather .dw-loc{ color:var(--ink-soft); font-size:11px; }
   .weather-loading{ font-size:12px; color:var(--ink-soft); padding:4px 0; }
+
+  .guidebtn{
+    margin-top:9px; display:inline-flex; align-items:center; gap:6px;
+    background:var(--brown); color:#fff; border:none; border-radius:999px;
+    padding:7px 14px; font-family:var(--font-body); font-weight:600; font-size:12.5px;
+    cursor:pointer; -webkit-tap-highlight-color:transparent;
+  }
+  .guidebtn:active{ transform:scale(.97);}
+  .btn-row{ display:flex; flex-wrap:wrap; gap:8px; margin-top:9px;}
+
+  .guide-overlay{
+    position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:200;
+    display:none; overflow-y:auto; -webkit-overflow-scrolling:touch;
+  }
+  .guide-overlay.open{ display:block;}
+  .guide-panel{
+    background:var(--paper); max-width:680px; margin:24px auto 40px auto;
+    border-radius:16px; overflow:hidden;
+  }
+  .guide-header{
+    padding:20px 20px 16px 20px; display:flex; align-items:flex-start;
+    justify-content:space-between; gap:12px; border-bottom:1px solid var(--line);
+  }
+  .guide-header-left{ display:flex; align-items:center; gap:12px;}
+  .guide-hero-icon{ font-size:40px; line-height:1;}
+  .guide-title{ font-family:var(--font-display); font-weight:700; font-size:20px; margin:0;}
+  .guide-subtitle{ font-size:13px; color:var(--ink-soft); margin-top:2px;}
+  .guide-close{
+    background:var(--line); border:none; border-radius:50%; width:32px; height:32px;
+    font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+    flex:none; color:var(--ink);
+  }
+  .guide-body{ padding:20px;}
+  .guide-section{ margin-bottom:22px;}
+  .guide-section-title{
+    font-family:var(--font-display); font-weight:700; font-size:13px;
+    text-transform:uppercase; letter-spacing:.06em; color:var(--blue);
+    margin:0 0 10px 0;
+  }
+  .facts-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px;}
+  @media(max-width:480px){.facts-grid{grid-template-columns:repeat(2,1fr);}}
+  .fact-card{
+    background:var(--blue-soft); border:1px solid #c5d5e8; border-radius:9px;
+    padding:10px; text-align:center;
+  }
+  .fact-val{ font-family:var(--font-display); font-weight:700; font-size:17px; color:var(--blue);}
+  .fact-lbl{ font-size:10.5px; color:var(--ink-soft); margin-top:2px; line-height:1.3;}
+  .anecdote-item{
+    background:var(--paper-card); border:1px solid var(--line);
+    border-left:3px solid var(--brown); border-radius:0 8px 8px 0;
+    padding:10px 13px; margin-bottom:8px; font-size:13.5px; line-height:1.5;
+  }
+  .anecdote-item b{ display:block; font-family:var(--font-display); font-size:13.5px;
+    font-weight:700; margin-bottom:3px; color:var(--ink);}
+  .quiz-item{
+    background:var(--paper-card); border:1px solid var(--line);
+    border-radius:9px; padding:12px 14px; margin-bottom:10px;
+  }
+  .quiz-q{ font-size:14px; font-weight:600; margin-bottom:8px;}
+  .quiz-opts{ display:flex; flex-direction:column; gap:5px;}
+  .quiz-opt{
+    background:var(--paper); border:1px solid var(--line); border-radius:7px;
+    padding:8px 11px; font-size:13px; text-align:left; cursor:pointer;
+    color:var(--ink); font-family:var(--font-body); transition:all .12s;
+  }
+  .quiz-opt:hover{ background:var(--blue-soft);}
+  .quiz-opt.correct{ background:var(--green-soft); border-color:var(--green); color:var(--green);}
+  .quiz-opt.wrong{ background:#fdecea; border-color:var(--red); color:var(--red);}
+  .quiz-opt.reveal{ background:var(--green-soft); border-color:var(--green); color:var(--green); opacity:.55;}
+  .quiz-fb{ font-size:12.5px; color:var(--ink-soft); margin-top:7px; line-height:1.4; min-height:16px;}
+  .defi-list{ display:flex; flex-direction:column; gap:8px;}
+  .defi-guide{
+    background:var(--gold-soft); border:1px solid #e8d3a0; border-radius:9px;
+    padding:10px 13px; font-size:13.5px; line-height:1.45; display:flex; gap:10px;
+  }
+  .defi-num{ font-family:var(--font-mono); font-weight:700; font-size:13px; color:var(--gold); flex:none;}
+  .quiz-score{
+    background:var(--blue-soft); border:1px solid #c5d5e8; border-radius:9px;
+    padding:10px 14px; display:flex; align-items:center; justify-content:space-between; margin-top:4px;
+  }
+  .quiz-score-val{ font-family:var(--font-display); font-weight:700; font-size:18px; color:var(--blue);}
+  .quiz-reset{
+    background:transparent; border:1px solid var(--line); border-radius:999px;
+    padding:5px 12px; font-size:12px; cursor:pointer; color:var(--ink-soft); font-family:var(--font-body);
+  }
+  footer{
     max-width:760px; margin:50px auto 0 auto; padding:0 18px 30px 18px;
     color:var(--ink-soft); font-size:12.5px; text-align:center; line-height:1.6;
   }
@@ -246,10 +332,14 @@
   <div id="days"></div>
 
   <footer>
-    Tape sur « 🧭 Itinéraire » pour lancer la navigation Google Maps vers l'étape.<br>
-    Carnet généré pour un usage hors-ligne — seul le bouton « Itinéraire » a besoin de réseau.
+    Tape sur « 🧭 Itinéraire » pour lancer la navigation · « 🎙️ Guide » pour la visite guidée.<br>
+    Carnet généré pour un usage hors-ligne — seuls les boutons Itinéraire et Météo ont besoin de réseau.
   </footer>
 
+</div>
+
+<div class="guide-overlay" id="guide-overlay" onclick="handleOverlayClick(event)">
+  <div class="guide-panel" id="guide-panel"></div>
 </div>
 
 <script>
@@ -285,8 +375,8 @@ const days = [
     stops:[
       {type:'place', time:'08h30', text:"Petit-déjeuner à l'hôtel (kitchenette)."},
       {type:'transport', time:'09h30', text:"Départ, métro jusqu'à Westminster.", map:'Westminster Underground Station, London, UK', mode:'transit'},
-      {type:'place', time:'10h00', text:"Big Ben.", desc:"La plus grande horloge à cloche du monde ! La cloche qui sonne les heures pèse 13,7 tonnes — son carillon retentit sur tout Westminster.", map:'Big Ben, London, UK'},
-      {type:'place', time:'11h00', text:"Relève de la garde à Buckingham Palace.", desc:"Le palais officiel du roi Charles III. La relève est un vrai spectacle militaire avec costumes rouges et immenses bonnets en fourrure noire — ça dure ~45 min, prends de la place tôt !", map:'Buckingham Palace, London, UK'},
+      {type:'place', time:'10h00', text:"Big Ben.", guide:'big_ben', desc:"La plus grande horloge à cloche du monde ! La cloche qui sonne les heures pèse 13,7 tonnes — son carillon retentit sur tout Westminster.", map:'Big Ben, London, UK'},
+      {type:'place', time:'11h00', text:"Relève de la garde à Buckingham Palace.", guide:'releve_garde', desc:"Le palais officiel du roi Charles III. La relève est un vrai spectacle militaire avec costumes rouges et immenses bonnets en fourrure noire — ça dure ~45 min, prends de la place tôt !", map:'Buckingham Palace, London, UK'},
       {type:'transport', time:'12h15', text:"Métro vers Piccadilly Circus puis Leicester Square — chasse aux statues de films.", desc:"Repère les statues grandeur nature cachées dans les ruelles — Mr Bean, Paddington, Laurel et Hardy... à toi de les trouver !", map:'Leicester Square, London, UK', mode:'transit'},
       {type:'place', time:'13h00', text:"Déjeuner à Chinatown — 🍽 Sushinoya.", desc:"L'un des plus grands Chinatowns d'Europe avec ses arches rouges et dorées. Bubble tea, gyozas, ramens... ambiance dépaysante garantie !", map:'Sushinoya, Chinatown, London, UK'},
       {type:'place', time:'15h40', text:"Écrans géants à The Now Building (Outernet).", desc:"Des écrans de 4 étages de haut enveloppent complètement le bâtiment — images et sons immersifs uniques au monde. Prépare-toi à avoir l'impression d'être dans une autre dimension !", map:'The Now Building, Outernet, London, UK'},
@@ -304,7 +394,7 @@ const days = [
       {type:'place', time:'08h30', text:"Petit-déjeuner à l'hôtel (kitchenette)."},
       {type:'transport', time:'09h30', text:"Métro vers Monument.", map:'Monument Underground Station, London, UK', mode:'transit'},
       {type:'place', time:'10h30', text:"Sky Garden.", desc:"Le plus haut jardin de Londres, perché au 35e étage d'un immeuble en verre ! Vue à 360° sur toute la ville avec des plantes tropicales à l'intérieur — et l'entrée est gratuite sur réservation.", note:"Réf. réservation : 20260609-67177711", map:'Sky Garden, London, UK'},
-      {type:'place', time:'11h45', text:"Leadenhall Market (gratuit).", desc:"Un marché couvert victorien de 1881 avec une verrière multicolore magnifique. C'est ici que les décorateurs de Harry Potter ont trouvé l'inspiration pour le Chemin de Traverse !", note:"Architecture victorienne qui a inspiré le Chemin de Traverse dans Harry Potter.", map:'Leadenhall Market, London, UK'},
+      {type:'place', time:'11h45', text:"Leadenhall Market (gratuit).", guide:'leadenhall', desc:"Un marché couvert victorien de 1881 avec une verrière multicolore magnifique. C'est ici que les décorateurs de Harry Potter ont trouvé l'inspiration pour le Chemin de Traverse !", note:"Architecture victorienne qui a inspiré le Chemin de Traverse dans Harry Potter.", map:'Leadenhall Market, London, UK'},
       {type:'place', time:'12h30', text:"Balade vers la Tamise — Tour de Londres (extérieur) et photos devant Tower Bridge.", desc:"La Tour de Londres a plus de 1000 ans — c'est là que sont gardés les Joyaux de la Couronne dont la Couronne Impériale ornée de 2 868 diamants ! Tower Bridge s'ouvre encore aujourd'hui pour laisser passer les grands bateaux.", map:'Tower Bridge, London, UK'},
       {type:'place', time:'13h00', text:"Traversée de London Bridge à pied, déjeuner à Borough Market.", desc:"L'un des plus vieux marchés alimentaires de Londres — il existait déjà au XIe siècle ! Des centaines de stands de street food du monde entier. Idéal pour goûter à tout.", map:'Borough Market, London, UK'},
       {type:'place', time:'—', text:"Repérage de l'appartement de Bridget Jones.", note:"Clin d'œil cinéma, à deux pas de Borough Market.", map:'8 Bedale St, London SE1 9AL, UK'},
@@ -317,7 +407,7 @@ const days = [
     stops:[
       {type:'place', time:'08h30', text:"Petit-déjeuner à l'hôtel (kitchenette)."},
       {type:'place', time:'09h45', text:"Grasse matinée relative — on y va à pied."},
-      {type:'place', time:'10h00', text:"Natural History Museum.", desc:"L'un des plus grands musées du monde — entrée gratuite ! Un squelette de diplodocus dans le hall, des météorites, un simulateur de séisme et 80 millions de spécimens. Prévois au moins 2h30.", note:"Billets réservés ✅", noteClass:'ok', map:'Natural History Museum, London, UK'},
+      {type:'place', time:'10h00', text:"Natural History Museum.", guide:'natural_history', desc:"L'un des plus grands musées du monde — entrée gratuite ! Un squelette de diplodocus dans le hall, des météorites, un simulateur de séisme et 80 millions de spécimens. Prévois au moins 2h30.", note:"Billets réservés ✅", noteClass:'ok', map:'Natural History Museum, London, UK'},
       {type:'place', time:'~13h00', text:"Science Museum — passage rapide.", desc:"Juste à côté du NHM, entrée gratuite aussi ! Fusées grandeur nature, simulateurs de vol, IA, robots et une capsule Apollo originale. 45 min suffisent pour les temps forts.", map:'Science Museum, London, UK'},
       {type:'place', time:'14h00', text:"Déjeuner vers South Kensington."},
       {type:'place', time:'15h00', text:"Balade dans Notting Hill — maisons pastel (Lancaster Road / St Luke's Mews).", desc:"Le quartier le plus coloré de Londres avec ses maisons aux couleurs pastel et ses ruelles fleuries. C'est aussi le décor du film Notting Hill avec Hugh Grant.", map:'Notting Hill, London, UK'},
@@ -343,7 +433,7 @@ const days = [
     stops:[
       {type:'place', time:'—', text:"Petit-déjeuner."},
       {type:'transport', time:'09h00', text:"Route vers Bath.", note:"Parking Park & Ride puis bus pour le centre-ville.", map:'Lansdown Park and Ride, Bath, UK', mode:'driving'},
-      {type:'place', time:'11h00', text:"Les Bains Romains.", desc:"Les thermes les mieux conservés du monde romain — construits il y a 2000 ans ! L'eau verte et fumante sort naturellement du sol à 46°C. Tu marcheras sur les mêmes mosaïques que les soldats romains.", note:"📅 À réserver en avance.", noteClass:'warn', map:'The Roman Baths, Bath, UK'},
+      {type:'place', time:'11h00', text:"Les Bains Romains.", guide:'roman_baths', desc:"Les thermes les mieux conservés du monde romain — construits il y a 2000 ans ! L'eau verte et fumante sort naturellement du sol à 46°C. Tu marcheras sur les mêmes mosaïques que les soldats romains.", note:"📅 À réserver en avance.", noteClass:'warn', map:'The Roman Baths, Bath, UK'},
       {type:'place', time:'14h00', text:"Jane Austen Centre.", desc:"Musée dédié à Jane Austen, l'auteure d'Orgueil et Préjugés, qui vécut à Bath. Costumes d'époque et immersion dans l'Angleterre du XIXe siècle.", map:'Jane Austen Centre, Bath, UK'},
       {type:'hotel', time:'17h00', text:"Retour au Tollgate Inn (Holt).", map:'The Tollgate Inn, Holt, Wiltshire, UK', mode:'driving'}
     ]
@@ -354,7 +444,7 @@ const days = [
       {type:'place', time:'—', text:"Petit-déjeuner."},
       {type:'hotel', time:'—', text:"Check-out Tollgate Inn (Holt).", note:"⏰ Check-out entre 7h45 et 10h30 — horaires stricts ! · 💳 Régler £316.00 sur place (rien n'a été encaissé). Visa/Mastercard acceptés. · 💼 Demander une facture pour remboursement CE.", noteClass:'warn'},
       {type:'place', time:'09h30', text:"Départ et route vers les gorges de Cheddar.", desc:"Les plus grandes gorges d'Angleterre creusées par un glacier il y a 12 000 ans — des falaises calcaires de 137 m de haut ! On y a aussi découvert le squelette humain le plus vieux de Grande-Bretagne (9 000 ans !).", note:"Temps de route depuis Holt : environ 1h.", map:'Cheddar Gorge, Somerset, UK', mode:'driving'},
-      {type:'place', time:'10h30', text:"Cheddar Gorge and Cave.", desc:"Les grottes de Cheddar sont les plus grandes cavernes naturelles de Grande-Bretagne — stalactites, stalagmites géantes et rivière souterraine. C'est ici qu'on a trouvé l'homme de Cheddar vieux de 9 000 ans !", note:"💷 ~£71 pour la famille · 📅 À réserver en avance.", noteClass:'warn', mapUrl:'https://maps.app.goo.gl/4T8QpdXB2YhgmwGp6'},
+      {type:'place', time:'10h30', text:"Cheddar Gorge and Cave.", guide:'cheddar_cave', desc:"Les grottes de Cheddar sont les plus grandes cavernes naturelles de Grande-Bretagne — stalactites, stalagmites géantes et rivière souterraine. C'est ici qu'on a trouvé l'homme de Cheddar vieux de 9 000 ans !", note:"💷 ~£71 pour la famille · 📅 À réserver en avance.", noteClass:'warn', mapUrl:'https://maps.app.goo.gl/4T8QpdXB2YhgmwGp6'},
       {type:'transport', time:'14h30', text:"Trajet vers le Spread Eagle Inn.", note:"Environ 45 min."},
       {type:'hotel', time:'14h30', text:"Arrivée au Spread Eagle Inn (Stourhead).", note:"Check-in à partir de 15h00 (arrivée anticipée sur demande) · Check-out avant 10h00.", map:'The Spread Eagle Inn, Stourton, UK', mode:'driving'},
       {type:'place', time:'15h45', text:"Visite des jardins de Stourhead.", desc:"L'un des plus beaux jardins paysagers du monde, inspiré des peintures classiques italiennes. Un lac artificiel entouré de temples grecs, un grotto mystérieux et des arbres centenaires — comme dans un conte.", map:'Stourhead, Stourton, UK'}
@@ -367,7 +457,7 @@ const days = [
       {type:'hotel', time:'—', text:"Check-out Spread Eagle Inn (Stourhead).", note:"⏰ Check-out avant 10h00. · 💳 Régler £125.00 sur place (acompte de £50 déjà versé, total £175). · 💼 Demander une facture pour remboursement CE.", noteClass:'warn'},
       {type:'transport', time:'09h30', text:"Trajet vers Lulworth Cove.", note:"Temps de route depuis Stourhead : environ 1h15.", map:'Lulworth Cove, Dorset, UK', mode:'driving'},
       {type:'place', time:'11h30', text:"Randonnée vers Durdle Door.", desc:"Une arche rocheuse calcaire sculptée par la mer sur des milliers d'années — l'une des images les plus célèbres d'Angleterre. La rando depuis Lulworth Cove est magnifique (environ 30-40 min à pied)."},
-      {type:'place', time:'13h00', text:"Durdle Door.", desc:"Vue imprenable sur l'arche depuis la plage de galets. L'eau est d'un bleu-vert translucide les jours ensoleillés — site classé au Patrimoine mondial de l'UNESCO.", map:'Durdle Door, Dorset, UK'},
+      {type:'place', time:'13h00', text:"Durdle Door.", guide:'durdle_door', desc:"Vue imprenable sur l'arche depuis la plage de galets. L'eau est d'un bleu-vert translucide les jours ensoleillés — site classé au Patrimoine mondial de l'UNESCO.", map:'Durdle Door, Dorset, UK'},
       {type:'place', time:'14h30', text:"Retour à Lulworth Cove."},
       {type:'hotel', time:'15h00', text:"Trajet vers Kingston Country Courtyard.", note:"Check-in à partir de 15h00 · Check-out avant 11h00 · ⚠️ Confirmer l'heure d'arrivée par mail 48h avant.", noteClass:'warn', map:'Kingston Country Courtyard, Dorset, UK', mode:'driving'}
     ]
@@ -389,7 +479,7 @@ const days = [
     num:10, date:'07/07', weekday:'Mardi', title:'Falaises & vélo', part:'roadtrip', section:PART_ROADTRIP,
     stops:[
       {type:'place', time:'—', text:"Petit-déjeuner."},
-      {type:'place', time:'—', text:"Seven Sisters, en voiture.", desc:"Sept falaises de craie blanche immaculées qui plongent dans la Manche — un panorama à couper le souffle. C'est l'une des images les plus emblématiques de toute l'Angleterre !", note:"Temps de route depuis Hove : environ 35 min.", map:'Seven Sisters Country Park, UK', mode:'driving'},
+      {type:'place', time:'—', text:"Seven Sisters, en voiture.", guide:'seven_sisters', desc:"Sept falaises de craie blanche immaculées qui plongent dans la Manche — un panorama à couper le souffle. C'est l'une des images les plus emblématiques de toute l'Angleterre !", note:"Temps de route depuis Hove : environ 35 min.", map:'Seven Sisters Country Park, UK', mode:'driving'},
       {type:'transport', time:'—', text:"Retour à l'hôtel en voiture, puis bus pour Brighton.", note:"Temps de route retour vers Hove : environ 35 min.", map:'Brighton, UK'},
       {type:'place', time:'—', text:"Si beau temps : location de vélo à Brighton Beach Bikes + balade côtière jusqu'à Telscombe Cliffs.", desc:"Longer la côte à vélo depuis Brighton jusqu'aux falaises de Telscombe — vue imprenable sur la Manche. Un des plus beaux spots du Sussex !", note:"💷 ~£49 pour la famille · 📅 À réserver en avance.", noteClass:'warn', mapUrl:'https://maps.app.goo.gl/WX3KCM5fTcDouLoB9'},
       {type:'place', time:'—', text:"🌧️ Plan B si mauvais temps : Royal Pavilion.", desc:"Palais extravagant du roi George IV mêlant architecture indienne et intérieurs chinois — comme être dans un conte des Mille et Une Nuits ! Audioguide disponible en français sur votre téléphone (gratuit). Compter 2h à 3h.", note:"💷 ~£55 pour la famille · 📅 Tickets moins chers en ligne. Ouvert dès 9h30.", map:'Royal Pavilion, Brighton, UK'},
@@ -473,9 +563,38 @@ const WMO = {
 function wmoIcon(code){ return WMO[code] || '🌡️'; }
 function isoDate(d){ return d.toISOString().slice(0,10); }
 
+// ===== GUIDES DE VISITE =====
+const GUIDES={big_ben:{title:'Big Ben',icon:'🕰️',subtitle:'Tour Elizabeth · Westminster',facts:[{v:'96 m',l:'hauteur de la tour'},{v:'13,7 t',l:'poids de la cloche'},{v:'1858',l:'installation'},{v:'334',l:'marches pour monter'},{v:'7 m',l:'diamètre du cadran'},{v:'4',l:'cadrans'}],anecdotes:[{t:'Big Ben, c\'est la cloche !',txt:'La tour s\'appelle Tour Elizabeth depuis 2012. Big Ben est le surnom de la grosse cloche à l\'intérieur.'},{t:'Elle penche !',txt:'La tour s\'incline à 0,26° à cause du métro souterrain. Invisible à l\'œil nu, mais réel !'},{t:'Un penny pour régler l\'heure.',txt:'Les gardiens posent des pièces sur le balancier. Chaque penny fait avancer l\'horloge de 0,4 s/jour !'}],quiz:[{q:'Comment s\'appelle officiellement la tour ?',o:['Tour de Londres','Tour Elizabeth','Tour Westminster','Tour Victoria'],a:1,e:'Depuis 2012, en hommage à la reine Elizabeth II.'},{q:'Combien pèse la cloche ?',o:['5 tonnes','13,7 tonnes','22 tonnes','1 tonne'],a:1,e:'13,7 tonnes — le poids de 9 voitures !'},{q:'Pourquoi des pièces sur le balancier ?',o:['Porte-bonheur','Éviter la rouille','Ajuster la vitesse','Décoration'],a:2,e:'Une pièce fait avancer l\'horloge de 0,4 s/jour pour régler l\'heure à la seconde !'}],defis:['Vois les 4 cadrans depuis un seul point.','Attends la sonnerie et compte les coups.','Photo : tu tiens la tour dans ta main.','Combien d\'immeubles de 3 étages pour le sommet ?']},releve_garde:{title:'Relève de la Garde',icon:'💂',subtitle:'Buckingham Palace · 11h00',facts:[{v:'1660',l:'date de la 1ère relève'},{v:'775',l:'pièces dans le palais'},{v:'45 min',l:'durée'},{v:'30',l:'gardes participants'},{v:'1837',l:'résidence royale'},{v:'19 ha',l:'jardin du palais'}],anecdotes:[{t:'Ces bonnets viennent d\'ours !',txt:'Les bonnets des gardes sont en fourrure d\'ours brun canadien. Chaque bonnet coûte 700£ et dure 20 ans.'},{t:'Ils ne doivent pas sourire.',txt:'Pas de sourire, pas de parole. Mais si quelqu\'un les touche, ils peuvent crier "Stand back from the King\'s guard!"'},{t:'Le roi n\'a pas de passeport.',txt:'Le passeport est délivré "au nom de Sa Majesté" — le monarque n\'en a donc pas besoin !'}],quiz:[{q:'Depuis quand la relève existe-t-elle ?',o:['1066','1453','1660','1837'],a:2,e:'Depuis 1660, sous Charles II — plus de 360 ans !'},{q:'De quoi sont faits les bonnets ?',o:['Laine d\'agneau','Fourrure d\'ours canadien','Plastique','Crin de cheval'],a:1,e:'Fourrure d\'ours brun canadien. 700£ pièce, dure 20 ans.'},{q:'Combien de pièces dans le palais ?',o:['120','350','775','1200'],a:2,e:'775 pièces dont 19 salles d\'État.'}],defis:['Trouve la sentinelle qui bouge le moins.','Compte les gardes participants.','Écoute la fanfare militaire.','Le drapeau est levé ? Oui = le roi est là !']},leadenhall:{title:'Leadenhall Market',icon:'🏛️',subtitle:'La City · Chemin de Traverse',facts:[{v:'1374',l:'1ère trace d\'un marché'},{v:'1881',l:'construction actuelle'},{v:'30 m',l:'hauteur de la verrière'},{v:'2001',l:'tournage Harry Potter'},{v:'vert & bordeaux',l:'couleurs'},{v:'gratuit',l:'entrée libre'}],anecdotes:[{t:'Le Chemin de Traverse était ici !',txt:'Dans le 1er film HP, l\'entrée du Leaky Cauldron était filmée côté Bull\'s Head Passage.'},{t:'Un marché vieux de 650 ans.',txt:'Il y avait un marché ici dès 1374 — volailles, fromages, viandes.'},{t:'Même architecte que Tower Bridge.',txt:'Horace Jones a conçu ce marché (1881) et Tower Bridge peu après. Il adorait la fonte et le verre !'}],quiz:[{q:'Dans quel film ce marché a-t-il servi ?',o:['James Bond','Harry Potter','Sherlock Holmes','Batman'],a:1,e:'Le Chemin de Traverse de Harry Potter ! L\'entrée côté Bull\'s Head Passage était le Leaky Cauldron.'},{q:'Qui l\'a construit ?',o:['Norman Foster','Christopher Wren','Horace Jones','George Gilbert Scott'],a:2,e:'Horace Jones en 1881 — aussi l\'architecte de Tower Bridge.'},{q:'Depuis quand y a-t-il un marché ici ?',o:['1881','1066','1374','1600'],a:2,e:'1374 — 650 ans de marché !'}],defis:['Trouve l\'entrée du Chemin de Traverse (Bull\'s Head Passage).','Photo façon Harry Potter.','Repère les détails en or sur la fonte.','Identifie les 3 couleurs de la structure.']},natural_history:{title:'Natural History Museum',icon:'🦕',subtitle:'South Kensington · Gratuit',facts:[{v:'80 M',l:'spécimens'},{v:'1881',l:'ouverture'},{v:'300',l:'scientifiques résidents'},{v:'5 M',l:'visiteurs/an'},{v:'25 m',l:'longueur du diplodocus'},{v:'gratuit',l:'entrée libre'}],anecdotes:[{t:'Dippy n\'est pas le vrai !',txt:'Le célèbre squelette de diplodocus "Dippy" est un moulage en plâtre offert par Carnegie en 1905. L\'original est à Pittsburgh.'},{t:'Tu peux toucher une météorite !',txt:'Dans la galerie des minéraux, une météorite lunaire et une martienne à toucher — des roches venues du cosmos !'},{t:'Le bâtiment est un specimen.',txt:'La façade victorienne est décorée d\'animaux sculptés : côté gauche = éteints, côté droit = vivants !'}],quiz:[{q:'Combien de spécimens ?',o:['1 million','80 millions','500 000','10 milliards'],a:1,e:'80 millions — soit 250 km d\'étagères.'},{q:'Comment s\'appelle le diplodocus ?',o:['Rex','Dippy','Dino','Harry'],a:1,e:'Dippy — une réplique en plâtre de 1905.'},{q:'Côté gauche de la façade ?',o:['Animaux marins','Animaux africains','Animaux éteints','Animaux britanniques'],a:2,e:'Animaux éteints à gauche, vivants à droite. Clin d\'œil à Darwin !'}],defis:['Trouve la météorite à toucher.','Repère les animaux de la façade.','Quel est l\'animal le plus bizarre selon toi ?','Trouve le specimen le plus vieux.']},roman_baths:{title:'Les Bains Romains',icon:'🛁',subtitle:'Bath · 2000 ans d\'histoire',facts:[{v:'46 °C',l:'température de l\'eau'},{v:'1 M',l:'litres/jour'},{v:'43 ap.J.-C.',l:'arrivée des Romains'},{v:'2000 ans',l:'âge des thermes'},{v:'12 000+',l:'objets dans l\'eau'},{v:'1978',l:'dernière baignade'}],anecdotes:[{t:'Une déesse mi-romaine, mi-celte.',txt:'Les Romains ont fusionné leur Minerva avec la déesse celte locale Sulis : Sulis Minerva — unique au monde !'},{t:'Des malédictions dans l\'eau.',txt:'Les Romains jetaient des tablettes de plomb avec des malédictions dans la source. Plus de 130 retrouvées !'},{t:'Interdit de se baigner depuis 1978.',txt:'Une touriste a contracté une méningite après s\'y être baignée et en est décédée. La baignade est interdite depuis.'}],quiz:[{q:'Température de l\'eau ?',o:['20°C','30°C','46°C','60°C'],a:2,e:'46°C ! Chauffée naturellement par la géothermie à 3 km de profondeur.'},{q:'Nom de la déesse ?',o:['Minerva','Sulis','Sulis Minerva','Venus'],a:2,e:'Sulis Minerva — fusion de la celte Sulis et de la romaine Minerva.'},{q:'Pourquoi la baignade est interdite ?',o:['Eau trop chaude','Touriste décédée après s\'y être baignée','Bassin fragile','Raisons religieuses'],a:1,e:'Une touriste a contracté une méningite mortelle en 1978.'}],defis:['Trouve les tablettes de malédiction en plomb.','Goûte l\'eau à la fontaine — quel goût ?','Trouve la tête de Sulis Minerva.','Repère les marques de sandales romaines sur les dalles.']},cheddar_cave:{title:'Grottes de Cheddar',icon:'🦇',subtitle:'Somerset · 450 000 ans de formation',facts:[{v:'450 000',l:'années de formation'},{v:'9 000',l:'ans — homme de Cheddar'},{v:'9 m',l:'stalactite la plus haute'},{v:'12 °C',l:'température constante'},{v:'1890',l:'découverte par Cox'},{v:'137 m',l:'falaises des gorges'}],anecdotes:[{t:'Ses descendants vivent ici.',txt:'Le squelette de l\'homme de Cheddar (9 000 ans) a été retrouvé ici en 1903. Des tests ADN ont montré que certains villageois actuels en sont des descendants directs !'},{t:'Le cheddar vient vraiment d\'ici.',txt:'12°C toute l\'année = température parfaite pour affiner le fromage. C\'est comme ça que le Cheddar est né, bien avant les réfrigérateurs !'},{t:'Les stalactites poussent très lentement.',txt:'1 cm tous les 100 ans. La stalactite de 9 m a mis environ 900 000 ans !'}],quiz:[{q:'Âge de l\'homme de Cheddar ?',o:['2 000 ans','5 000 ans','9 000 ans','50 000 ans'],a:2,e:'9 000 ans — et certains habitants actuels en sont les descendants !'},{q:'Pourquoi affiner du fromage dans les grottes ?',o:['Le parfumer','12°C constante toute l\'année','Éviter les taxes','Tradition'],a:1,e:'12°C toute l\'année — parfait pour affiner le fromage !'},{q:'Croissance d\'une stalactite par siècle ?',o:['1 mm','1 cm','10 cm','1 m'],a:1,e:'1 cm tous les 100 ans. La stalactite de 9 m a mis ~900 000 ans !'}],defis:['Estime l\'âge de la stalactite la plus haute.','Ferme les yeux 10s et écoute le silence absolu.','Cherche des formations qui ressemblent à des animaux.','Touche la paroi — humide ou sèche ?']},durdle_door:{title:'Durdle Door',icon:'🌊',subtitle:'Côte Jurassique · Dorset',facts:[{v:'140 M',l:'années — âge de la roche'},{v:'40 m',l:'hauteur de l\'arche'},{v:'30 cm',l:'recul/an'},{v:'1641',l:'même famille propriétaire'},{v:'UNESCO',l:'Patrimoine mondial'},{v:'Jurassique',l:'période géologique'}],anecdotes:[{t:'Durdle = "trouer" en vieux anglais.',txt:'"Thirl" en vieil anglais = percer. Durdle Door = "la porte qui perce la roche".'},{t:'Propriété privée depuis 1641.',txt:'La plage appartient à la famille Weld depuis 1641. Le sol sous tes pieds leur appartient !'},{t:'L\'arche rétrécit chaque année.',txt:'La mer grignote la base de ~30 cm/an. Dans quelques millénaires, elle s\'effondrera.'}],quiz:[{q:'Que signifie "Durdle" ?',o:['Grande falaise','Percer / trouer','Porte de pierre','Eau bleue'],a:1,e:'"Thirl" = percer. Durdle Door = la porte qui perce la roche.'},{q:'Âge de la roche ?',o:['10 millions','50 millions','140 millions','1 milliard'],a:2,e:'140 millions d\'années — époque des dinosaures.'},{q:'Recul annuel des falaises ?',o:['1 cm','30 cm','1 m','5 m'],a:1,e:'30 cm/an. L\'arche s\'effondrera dans quelques millénaires.'}],defis:['Monte sur le sentier pour voir l\'arche de dessus !','Cherche des fossiles dans les rochers.','Identifie 3 types de roches différentes.','Photo : l\'arche encadrée derrière toi.']},seven_sisters:{title:'Seven Sisters',icon:'🏔️',subtitle:'Sussex · Falaises de craie blanche',facts:[{v:'7',l:'falaises'},{v:'70 M',l:'années — âge de la craie'},{v:'30 cm',l:'recul/an'},{v:'4 000 ha',l:'parc naturel'},{v:'163 m',l:'hauteur maximale'},{v:'plancton',l:'composition de la craie'}],anecdotes:[{t:'La craie = plancton fossilisé !',txt:'Des milliards de minuscules coquilles de plancton accumulées au fond d\'une mer tropicale il y a 70 millions d\'années.'},{t:'Les 7 sœurs ont un prénom.',txt:'Haven Brow, Short Brow, Rough Brow, Brass Point, Flagstaff Point, Bailey\'s Hill et Went Hill Brow.'},{t:'Vues dans Harry Potter.',txt:'Ces falaises ont servi de décor dans Harry Potter et les Reliques de la Mort et dans le film "Elizabeth" avec Cate Blanchett.'}],quiz:[{q:'De quoi est faite la craie ?',o:['Calcaire marin','Plancton fossilisé','Sel cristallisé','Quartz blanc'],a:1,e:'Des milliards de coquilles de plancton fossilisées il y a 70 millions d\'années !'},{q:'Combien de sœurs ?',o:['5','6','7','8'],a:2,e:'Exactement 7 — chacune a un prénom !'},{q:'Dans quel film célèbre ?',o:['Le Roi Lion','Harry Potter','Jurassic Park','Titanic'],a:1,e:'Harry Potter et les Reliques de la Mort, et "Elizabeth" avec Cate Blanchett.'}],defis:['Compte les 7 sœurs depuis la plage.','Cherche des fragments de craie — friables ?','Repère où les falaises semblent les plus blanches.','Observe les oiseaux nichant dans les falaises.']}};
+
+let guideScore=0,guideAnswered=[];
+function openGuide(key){
+  const g=GUIDES[key];if(!g)return;
+  guideScore=0;guideAnswered=[];
+  const panel=document.getElementById('guide-panel');
+  panel.innerHTML=`<div class="guide-header"><div class="guide-header-left"><span class="guide-hero-icon">${g.icon}</span><div><div class="guide-title">${g.title}</div><div class="guide-subtitle">${g.subtitle}</div></div></div><button class="guide-close" onclick="closeGuide()">✕</button></div><div class="guide-body"><div class="guide-section"><div class="guide-section-title">⚡ Chiffres fous</div><div class="facts-grid">${g.facts.map(f=>`<div class="fact-card"><div class="fact-val">${f.v}</div><div class="fact-lbl">${f.l}</div></div>`).join('')}</div></div><div class="guide-section"><div class="guide-section-title">💡 Le savais-tu ?</div>${g.anecdotes.map(a=>`<div class="anecdote-item"><b>${a.t}</b>${a.txt}</div>`).join('')}</div><div class="guide-section"><div class="guide-section-title">🧠 Quiz</div>${g.quiz.map((q,qi)=>`<div class="quiz-item"><div class="quiz-q">Q${qi+1}. ${q.q}</div><div class="quiz-opts" id="gopts-${qi}">${q.o.map((o,oi)=>`<button class="quiz-opt" onclick="guideAnswer('${key}',${qi},${oi})">${o}</button>`).join('')}</div><div class="quiz-fb" id="gfb-${qi}"></div></div>`).join('')}<div class="quiz-score"><div><div style="font-size:11px;color:var(--ink-soft)">Score</div><div class="quiz-score-val" id="gscore">0 / ${g.quiz.length}</div></div><button class="quiz-reset" onclick="openGuide('${key}')">Recommencer</button></div></div><div class="guide-section"><div class="guide-section-title">🏆 Défis sur place</div><div class="defi-list">${g.defis.map((d,i)=>`<div class="defi-guide"><span class="defi-num">${i+1}.</span><span>${d}</span></div>`).join('')}</div></div></div>`;
+  document.getElementById('guide-overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeGuide(){document.getElementById('guide-overlay').classList.remove('open');document.body.style.overflow='';}
+function handleOverlayClick(e){if(e.target===document.getElementById('guide-overlay'))closeGuide();}
+function guideAnswer(key,qi,choice){
+  if(guideAnswered.includes(qi))return;
+  guideAnswered.push(qi);
+  const g=GUIDES[key],q=g.quiz[qi];
+  document.querySelectorAll(`#gopts-${qi} .quiz-opt`).forEach((b,i)=>{
+    b.disabled=true;
+    if(i===q.a)b.classList.add(choice!==q.a?'reveal':'correct');
+    if(i===choice&&choice!==q.a)b.classList.add('wrong');
+  });
+  const fb=document.getElementById(`gfb-${qi}`);
+  if(choice===q.a){guideScore++;fb.textContent='✅ Bravo ! '+q.e;fb.style.color='var(--green)';}
+  else{fb.textContent='❌ '+q.e;fb.style.color='var(--red)';}
+  document.getElementById('gscore').textContent=guideScore+' / '+g.quiz.length;
+}
+
+
 async function loadWeather(){
   try {
-    // Grouper les jours par localisation unique
     const locationGroups = {};
     TRIP_DAYS.forEach(day => {
       const key = `${day.lat},${day.lon}`;
@@ -556,6 +675,8 @@ days.forEach(day => {
     const descHtml = s.desc ? `<div class="stop-desc">✨ ${s.desc}</div>` : '';
     const noteHtml = s.note ? `<div class="stop-note ${s.noteClass||''}">${s.note}</div>` : '';
     const btnHtml = mapTarget ? `<button class="navbtn" onclick="goTo('${mapTarget.replace(/'/g,"\\'")}','${s.mode||''}')">🧭 Itinéraire</button>` : '';
+    const guideHtml = s.guide ? `<button class="guidebtn" onclick="openGuide('${s.guide}')">🎙️ Guide</button>` : '';
+    const btns = (btnHtml||guideHtml) ? `<div class="btn-row">${btnHtml}${guideHtml}</div>` : '';
     return `
       <div class="stop ${s.type}">
         <span class="marker ${s.type}"></span>
@@ -564,7 +685,7 @@ days.forEach(day => {
           <div class="stop-text">${s.text}</div>
           ${descHtml}
           ${noteHtml}
-          ${btnHtml}
+          ${btns}
         </div>
       </div>`;
   }).join('');
