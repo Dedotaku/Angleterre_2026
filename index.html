@@ -183,7 +183,17 @@
   }
   .navbtn:active{ transform:scale(.97);}
 
-  footer{
+  /* ===== Météo inline ===== */
+  .day-weather{
+    display:inline-flex; align-items:center; gap:8px; flex-wrap:wrap;
+    margin-top:6px; background:var(--blue-soft); border:1px solid #c5d5e8;
+    border-radius:999px; padding:4px 12px; font-size:12.5px;
+  }
+  .day-weather .dw-icon{ font-size:16px; line-height:1; }
+  .day-weather .dw-temp{ font-family:var(--font-display); font-weight:700; color:var(--ink); }
+  .day-weather .dw-rain{ color:var(--ink-soft); }
+  .day-weather .dw-loc{ color:var(--ink-soft); font-size:11px; }
+  .weather-loading{ font-size:12px; color:var(--ink-soft); padding:4px 0; }
     max-width:760px; margin:50px auto 0 auto; padding:0 18px 30px 18px;
     color:var(--ink-soft); font-size:12.5px; text-align:center; line-height:1.6;
   }
@@ -436,7 +446,86 @@ function goTo(input, mode){
   }
 }
 
-// Restaure la position au retour sur la page
+// ===== MÉTÉO — PRÉVISIONS VOYAGE =====
+const TRIP_DAYS = [
+  { num:'J1',  date:'2026-06-28', label:'28/06', name:'Lyon → Londres', lat:51.5074, lon:-0.1278 },
+  { num:'J2',  date:'2026-06-29', label:'29/06', name:'Londres',         lat:51.5074, lon:-0.1278 },
+  { num:'J3',  date:'2026-06-30', label:'30/06', name:'Londres',         lat:51.5074, lon:-0.1278 },
+  { num:'J4',  date:'2026-07-01', label:'01/07', name:'Londres',         lat:51.5074, lon:-0.1278 },
+  { num:'J5',  date:'2026-07-02', label:'02/07', name:'Cotswolds',       lat:51.8842, lon:-1.7581 },
+  { num:'J6',  date:'2026-07-03', label:'03/07', name:'Bath',            lat:51.3811, lon:-2.3590 },
+  { num:'J7',  date:'2026-07-04', label:'04/07', name:'Cheddar',         lat:51.2727, lon:-2.7785 },
+  { num:'J8',  date:'2026-07-05', label:'05/07', name:'Dorset',          lat:50.6215, lon:-2.2470 },
+  { num:'J9',  date:'2026-07-06', label:'06/07', name:'New Forest',      lat:50.8794, lon:-1.5720 },
+  { num:'J10', date:'2026-07-07', label:'07/07', name:'Brighton',        lat:50.8229, lon:-0.1363 },
+  { num:'J11', date:'2026-07-08', label:'08/07', name:'Hove → LHR',     lat:50.8305, lon:-0.1682 },
+];
+
+const WMO = {
+  0:'☀️', 1:'🌤️', 2:'⛅', 3:'☁️',
+  45:'🌫️', 48:'🌫️',
+  51:'🌦️', 53:'🌦️', 55:'🌧️',
+  61:'🌧️', 63:'🌧️', 65:'🌧️',
+  71:'❄️', 73:'❄️', 75:'❄️',
+  77:'🌨️', 80:'🌦️', 81:'🌦️', 82:'⛈️',
+  85:'🌨️', 86:'🌨️', 95:'⛈️', 96:'⛈️', 99:'⛈️'
+};
+function wmoIcon(code){ return WMO[code] || '🌡️'; }
+function isoDate(d){ return d.toISOString().slice(0,10); }
+
+async function loadWeather(){
+  try {
+    // Grouper les jours par localisation unique
+    const locationGroups = {};
+    TRIP_DAYS.forEach(day => {
+      const key = `${day.lat},${day.lon}`;
+      if(!locationGroups[key]) locationGroups[key] = { lat:day.lat, lon:day.lon, dates:[] };
+      locationGroups[key].dates.push(day.date);
+    });
+
+    const results = {};
+    await Promise.all(Object.entries(locationGroups).map(async ([key, loc]) => {
+      const start = loc.dates[0];
+      const end   = loc.dates[loc.dates.length - 1];
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${loc.lat}&longitude=${loc.lon}&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Europe%2FLondon&start_date=${start}&end_date=${end}`;
+      const res  = await fetch(url);
+      const data = await res.json();
+      data.daily.time.forEach((date, i) => {
+        results[`${key}_${date}`] = {
+          code: data.daily.weathercode[i],
+          max:  Math.round(data.daily.temperature_2m_max[i]),
+          min:  Math.round(data.daily.temperature_2m_min[i]),
+          rain: data.daily.precipitation_probability_max[i],
+        };
+      });
+    }));
+
+    // Injecter dans chaque section de jour
+    TRIP_DAYS.forEach((day, idx) => {
+      const el = document.getElementById(`dw-${idx + 1}`);
+      if(!el) return;
+      const key = `${day.lat},${day.lon}_${day.date}`;
+      const w = results[key];
+      if(w){
+        el.innerHTML = `
+          <span class="dw-icon">${wmoIcon(w.code)}</span>
+          <span class="dw-temp">${w.max}° / ${w.min}°</span>
+          <span class="dw-rain">💧 ${w.rain}%</span>
+          <span class="dw-loc">· ${day.name}</span>
+        `;
+      } else {
+        el.innerHTML = '<span class="dw-rain">Prévision indisponible</span>';
+      }
+    });
+
+  } catch(e){
+    document.querySelectorAll('.day-weather').forEach(el => {
+      el.innerHTML = '<span class="dw-rain">Météo indisponible</span>';
+    });
+  }
+}
+
+loadWeather();
 window.addEventListener('pageshow', () => {
   const y = sessionStorage.getItem('scrollY');
   if(y) { window.scrollTo(0, parseInt(y)); sessionStorage.removeItem('scrollY'); }
@@ -486,6 +575,7 @@ days.forEach(day => {
       <div>
         <div class="weekday">${day.weekday}</div>
         <h3>${day.title}</h3>
+        <div class="day-weather" id="dw-${day.num}"><span class="dw-rain" style="font-size:11px">Chargement météo…</span></div>
       </div>
     </div>
     <div class="road">${stopsHtml}</div>
